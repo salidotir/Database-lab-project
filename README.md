@@ -2,6 +2,6 @@
 
 CRUD database application
 
-UI implemented using python GUI toolkit, Tkinter.
+UI implemented using python GUI toolkit, tkinter and tksheet
 
-Run main_window.py file to test the application.
+Run crud_main_window.py file to test the application.
