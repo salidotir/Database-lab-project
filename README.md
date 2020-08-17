@@ -13,3 +13,4 @@ Run crud_main_window.py file to test the application.
 3. create a database named `shop`
 4. Add a SQL server authentication login `Security > logins > new logins > SQL server authentication login` **login name**:postgres **password**:postgres
 5. run: `alembic upgrade head`
+6. run: `python Schema.py -g`
