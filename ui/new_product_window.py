@@ -1,15 +1,13 @@
 from sqlalchemy import create_engine
 from tkinter import *
 
+
 def run_query_on_db():
-    engine = create_engine('mssql+pyodbc://MHL/fourthDB?driver=SQL Server?Trusted_Connection=yes')
-    conn = engine.connect()
-    engine.execute("set identity_insert product on")
-    result = engine.execute("insert into product(pid, pname, price) values('4', 'p4', '4000')")
-    result.close()
-    conn.close()
-    
     print("Product inserted.")
+
+    #
+    # To Be Completed
+    #
 
 
 def create_new_product_window():

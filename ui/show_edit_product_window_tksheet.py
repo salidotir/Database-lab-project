@@ -5,10 +5,6 @@ global data
 data = [["id", "name", "price"], [1, "p1", 1000], [2, "p2", 2000], [3, "p3", 3000]]
 
 
-def fill_data_from_db():
-    pass
-
-
 class product_demo(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
@@ -86,10 +82,23 @@ class product_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
+        #
+        # To Be Completed
+        #
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
+        #
+        # To Be Completed
+        #
+
+    def fill_data_from_db(self):
+        # get data from database
+        #
+        # To Be Completed
+        #
+        pass
 
 
 # app = product_demo()

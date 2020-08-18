@@ -3,15 +3,12 @@ from tkinter import *
 
 
 def run_query_on_db():
-    # engine = create_engine('mssql+pyodbc://MHL/fourthDB?driver=SQL Server?Trusted_Connection=yes')
-    # conn = engine.connect()
-    # engine.execute("set identity_insert customer on")
-    # result = engine.execute("insert into customer(cid, cname, ctype) values(4, 'cust4', 2)")
-    # result.close()
-    # conn.close()
-
     # print(int(ctype.get()))
     print("Customer inserted.")
+
+    #
+    # To Be Completed
+    #
 
 
 def create_new_customer_window():

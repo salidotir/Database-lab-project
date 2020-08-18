@@ -86,10 +86,23 @@ class customer_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
+        #
+        # To Be Completed
+        #
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
+        #
+        # To Be Completed
+        #
+
+    def fill_data_from_db(self):
+        # get data from database
+        #
+        # To Be Completed
+        #
+        pass
 
 
 # app = customer_demo()

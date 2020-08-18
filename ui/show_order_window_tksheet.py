@@ -5,11 +5,7 @@ global data
 data = [["id", "date", "customer id", "total price"], [1, "2020-07-10", 1,  10000], [2, "2019-12-19", 3,  25000]]
 
 
-def fill_data_from_db():
-    pass
-
-
-class oder_demo(tk.Tk):
+class show_oder_demo(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self.grid_columnconfigure(0, weight=1)
@@ -86,10 +82,23 @@ class oder_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
+        #
+        # To Be Completed
+        #
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
+        #
+        # To Be Completed
+        #
+
+    def fill_data_from_db(self):
+        # get data from database
+        #
+        # To Be Completed
+        #
+        pass
 
 
 # app = oder_demo()
