@@ -6,6 +6,7 @@ from sqlalchemy import BigInteger, CHAR, Column, DECIMAL, DateTime, ForeignKey, 
     create_engine, MetaData
 from sqlalchemy.orm import relationship, scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_serializer import SerializerMixin
 from faker.factory import Factory
 faker = Factory.create
 faker = faker()
@@ -23,7 +24,7 @@ Base.query = db_session.query_property()
 Base.metadata.create_all(engine, Base.metadata.tables.values(), checkfirst=True)
 
 
-class CUSTOMER(Base):
+class CUSTOMER(Base, SerializerMixin):
     __tablename__ = 'CUSTOMER'
 
     cid = Column(Integer, primary_key=True)
@@ -32,7 +33,7 @@ class CUSTOMER(Base):
     maxCredit = Column(BigInteger)
 
 
-class PRODUCT(Base):
+class PRODUCT(Base, SerializerMixin):
     __tablename__ = 'PRODUCT'
 
     pid = Column(Integer, primary_key=True)
@@ -40,7 +41,7 @@ class PRODUCT(Base):
     price = Column(DECIMAL(10, 2), nullable=False)
 
 
-class ORDER1(Base):
+class ORDER1(Base, SerializerMixin):
     __tablename__ = 'ORDER1'
 
     oid = Column(Integer, primary_key=True)
@@ -50,7 +51,7 @@ class ORDER1(Base):
     CUSTOMER = relationship('CUSTOMER', backref='ORDER1', passive_deletes=True)
 
 
-class OrderTotal(ORDER1):
+class OrderTotal(ORDER1, SerializerMixin):
     __tablename__ = 'OrderTotal'
 
     oid = Column(ForeignKey('ORDER1.oid', ondelete='CASCADE'), primary_key=True)
@@ -58,7 +59,7 @@ class OrderTotal(ORDER1):
     lastUpdate = Column(DateTime)
 
 
-class ORDERITEM(Base):
+class ORDERITEM(Base, SerializerMixin):
     __tablename__ = 'ORDERITEM'
 
     iid = Column(Integer, primary_key=True)

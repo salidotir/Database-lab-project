@@ -1,7 +1,6 @@
 alembic==1.4.2
 cffi==1.14.2
 click==7.1.2
-Dumper==1.2.0
 Faker==4.1.2
 Flask==1.1.2
 Flask-Migrate==2.5.3
@@ -18,6 +17,7 @@ python-dateutil==2.8.1
 python-editor==1.0.4
 six==1.15.0
 SQLAlchemy==1.3.18
+SQLAlchemy-serializer==1.3.4.2
 text-unidecode==1.3
 tksheet==4.9.6
 Werkzeug==1.0.1
