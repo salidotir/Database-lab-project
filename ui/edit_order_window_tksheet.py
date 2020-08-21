@@ -1,19 +1,26 @@
 from tksheet import Sheet
 import tkinter as tk
+from Schema import ORDERITEM, db_session
 
-global data
-data = [["iid", "product id", "quantity"], [1, 1, 3], [2, 2, 2]]
+headers = [
+    "iid",
+    "oid",
+    "pid",
+    "quantity"
+]
+data = []
 
 
 class edit_oder_demo(tk.Tk):
-    def __init__(self):
+    def __init__(self, oid):
         # oid will be set in edit_order() function in crud_main_window.py to be called from fill_data_from_db()
-        oid = -1
+        self.oid = oid
 
         tk.Tk.__init__(self)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.frame = tk.Frame(self)
+        self.fill_data_from_db()
         self.frame.grid_columnconfigure(0, weight=1)
         self.frame.grid_rowconfigure(0, weight=1)
         self.sheet = Sheet(self.frame,
@@ -21,6 +28,7 @@ class edit_oder_demo(tk.Tk):
                            # empty_vertical = 0,
                            column_width=120,
                            startup_select=(0, 1, "rows"),
+                           headers=headers,
                            data=data,
                            height=500,  # height and width arguments are optional
                            width=550  # For full startup arguments see DOCUMENTATION.md
@@ -63,7 +71,7 @@ class edit_oder_demo(tk.Tk):
         # __________ BINDING A FUNCTIONS TO USER ACTIONS __________
 
         self.sheet.extra_bindings([("end_edit_cell", self.end_edit_cell),
-                                   ("rc_delete_row", self.row_delete)
+                                   ("begin_rc_delete_row", self.row_delete)
                                    ])
 
         # __________ GETTING FULL SHEET DATA __________
@@ -85,25 +93,38 @@ class edit_oder_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
-        #
-        # To Be Completed
-        #
+        ORDERITEM.query.filter_by(
+            **{"iid": self.sheet.get_cell_data(
+                event[0],
+                0
+            )}
+        ).update(
+            {headers[event[1]]: self.sheet.get_cell_data(
+                event[0],
+                event[1]
+            )}
+        )
+        db_session.commit()
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
-        #
-        # To Be Completed
-        #
+        print({"iid": self.sheet.get_cell_data(
+            event[1][0],
+            0
+        )})
+        ORDERITEM.query.filter_by(
+            **{"iid": self.sheet.get_cell_data(
+                event[1][0],
+                0
+            )}
+        ).delete()
+        db_session.commit()
 
     def fill_data_from_db(self):
-        # get data from database
-        #
-        # To Be Completed
-        #
-
-        print(self.oid)
-        pass
+        ois = ORDERITEM.query.filter_by(oid=self.oid)
+        k = [[i.to_dict().get(z) for z in headers] for i in ois]
+        data.extend(k)
 
 
 # app = oder_demo()
