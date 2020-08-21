@@ -117,6 +117,7 @@ class show_oder_demo(tk.Tk):
         db_session.commit()
 
     def fill_data_from_db(self):
+        data.clear()
         cs = ORDER1.query.all()
         k = [[i.to_dict(rules=('-CUSTOMER','-ORDERITEM')).get(z) for z in headers] for i in cs]
         data.extend(k)
