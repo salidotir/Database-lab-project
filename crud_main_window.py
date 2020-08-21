@@ -57,7 +57,7 @@ def main():
         app = show_oder_demo()
         app.mainloop()
 
-    btn_show_orders = Button(root, text="Show orders", command=show_orders).place(x=210, y=270)
+    btn_show_orders = Button(root, text="Show orders", command=show_orders).place(x=210, y=228)
 
     # ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.
 
@@ -74,10 +74,10 @@ def main():
 
     orders = ORDER1.query.all()
     osid = tuple([i.oid for i in orders]) if len(orders) > 0 else ("No order",)
-    order_id_label = Label(root, text='order id: ').place(x=95, y=225)
-    order_id_text_box = OptionMenu(root, temp_order_id, *osid).place(x=145, y=225)
+    order_id_label = Label(root, text='order id: ').place(x=95, y=180)
+    order_id_text_box = OptionMenu(root, temp_order_id, *osid).place(x=145, y=175)
 
-    btn_edit_order = Button(root, text="Edit order", command=edit_order).place(x=215, y=220)
+    btn_edit_order = Button(root, text="Edit order", command=edit_order).place(x=215, y=178)
 
     # ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.
 
@@ -96,29 +96,10 @@ def main():
 
     cs = CUSTOMER.query.all()
     csid = tuple([i.cid for i in cs])
-    cid1_label = Label(root, text='cust id: ').place(x=95, y=125)
+    cid1_label = Label(root, text='cust id: ').place(x=95, y=130)
     cid1_text_box = OptionMenu(root, temp_cid1, *csid).place(x=145, y=125)
 
-    btn_new_order = Button(root, text="New order", command=new_order).place(x=215, y=120)
-
-    # ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.
-
-    temp_cid2 = StringVar()
-
-    def show_order_total():
-        if temp_cid2.get() != "":
-            cid2 = int(temp_cid2.get())
-            # show order total of current cid
-            #
-            # To Be Completed
-            #
-        else:
-            pass
-
-    cid2_label = Label(root, text='cust id: ').place(x=95, y=175)
-    cid2_text_box = OptionMenu(root, temp_cid2, *csid).place(x=145, y=175)
-
-    btn_new_order = Button(root, text="Order total", command=show_order_total).place(x=215, y=170)
+    btn_new_order = Button(root, text="New order", command=new_order).place(x=215, y=128)
 
     # ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.
 
