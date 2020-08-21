@@ -115,6 +115,7 @@ class customer_demo(tk.Tk):
         db_session.commit()
 
     def fill_data_from_db(self):
+        data.clear()
         cs = CUSTOMER.query.all()
         k = [[i.to_dict(rules=('-ORDER1',)).get(z) for z in headers] for i in cs]
         data.extend(k)
