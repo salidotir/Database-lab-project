@@ -11,6 +11,7 @@ from faker.factory import Factory
 faker = Factory.create
 faker = faker()
 
+# database_URL = r'mssql+pymssql://postgres:postgres@localhost\MSSQLSERVER/shop'
 database_URL = r'mssql+pymssql://postgres:postgres@localhost\SQLEXPRESS/shop'
 Base = declarative_base()
 metadata = MetaData()
