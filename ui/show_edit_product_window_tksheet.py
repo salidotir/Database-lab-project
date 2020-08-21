@@ -117,6 +117,7 @@ class product_demo(tk.Tk):
         db_session.commit()
 
     def fill_data_from_db(self):
+        data.clear()
         ps = PRODUCT.query.all()
         k = [[i.to_dict(rules=('-ORDERITEM',)).get(z) for z in headers] for i in ps]
         data.extend(k)
