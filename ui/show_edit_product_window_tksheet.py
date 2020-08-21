@@ -1,8 +1,12 @@
 from tksheet import Sheet
 import tkinter as tk
+from Schema import db_session, PRODUCT
 
 global data
-data = [["id", "name", "price"], [1, "p1", 1000], [2, "p2", 2000], [3, "p3", 3000]]
+headers = ["pid",
+           "pName",
+           "price"]
+data = []
 
 
 class product_demo(tk.Tk):
@@ -11,11 +15,13 @@ class product_demo(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.frame = tk.Frame(self)
+        self.fill_data_from_db()
         self.frame.grid_columnconfigure(0, weight=1)
         self.frame.grid_rowconfigure(0, weight=1)
         self.sheet = Sheet(self.frame,
                            page_up_down_select_row=True,
                            # empty_vertical = 0,
+                           headers=headers,
                            column_width=120,
                            startup_select=(0, 1, "rows"),
                            data=data,
@@ -60,7 +66,7 @@ class product_demo(tk.Tk):
         # __________ BINDING A FUNCTIONS TO USER ACTIONS __________
 
         self.sheet.extra_bindings([("end_edit_cell", self.end_edit_cell),
-                                   ("rc_delete_row", self.row_delete)
+                                   ("begin_rc_delete_row", self.row_delete)
                                    ])
 
         # __________ GETTING FULL SHEET DATA __________
@@ -82,23 +88,38 @@ class product_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
-        #
-        # To Be Completed
-        #
+        PRODUCT.query.filter_by(
+            **{"pid": self.sheet.get_cell_data(
+                event[0],
+                0
+            )}
+        ).update(
+            {headers[event[1]]: self.sheet.get_cell_data(
+                event[0],
+                event[1]
+            )}
+        )
+        db_session.commit()
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
-        #
-        # To Be Completed
-        #
+        print({"pid": self.sheet.get_cell_data(
+            event[1][0],
+            0
+        )})
+        PRODUCT.query.filter_by(
+            **{"pid": self.sheet.get_cell_data(
+                event[1][0],
+                0
+            )}
+        ).delete()
+        db_session.commit()
 
     def fill_data_from_db(self):
-        # get data from database
-        #
-        # To Be Completed
-        #
-        pass
+        ps = PRODUCT.query.all()
+        k = [[i.to_dict(rules=('-ORDERITEM',)).get(z) for z in headers] for i in ps]
+        data.extend(k)
 
 
 # app = product_demo()
