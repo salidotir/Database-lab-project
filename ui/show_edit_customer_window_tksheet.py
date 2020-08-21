@@ -1,9 +1,10 @@
 from tksheet import Sheet
 import tkinter as tk
-from Schema import CUSTOMER
+from Schema import CUSTOMER, db_session
 
 global data
-data = [["cid", "cName", "customerType", "maxCredit"], ]
+headers = ["cid", "cName", "customerType", "maxCredit"]
+data = []
 
 
 class customer_demo(tk.Tk):
@@ -16,6 +17,7 @@ class customer_demo(tk.Tk):
         self.frame.grid_columnconfigure(0, weight=1)
         self.frame.grid_rowconfigure(0, weight=1)
         self.sheet = Sheet(self.frame,
+                           headers=headers,
                            page_up_down_select_row=True,
                            # empty_vertical = 0,
                            column_width=120,
@@ -62,7 +64,7 @@ class customer_demo(tk.Tk):
         # __________ BINDING A FUNCTIONS TO USER ACTIONS __________
 
         self.sheet.extra_bindings([("end_edit_cell", self.end_edit_cell),
-                                   ("rc_delete_row", self.row_delete)
+                                   ("begin_rc_delete_row", self.row_delete)
                                    ])
 
         # __________ GETTING FULL SHEET DATA __________
@@ -84,22 +86,38 @@ class customer_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
-        #
-        # To Be Completed
-        #
+        CUSTOMER.query.filter_by(
+            **{"cid": self.sheet.get_cell_data(
+                event[0],
+                0
+            )}
+        ).update(
+            {headers[event[1]]: self.sheet.get_cell_data(
+                event[0],
+                event[1]
+            )}
+        )
+        db_session.commit()
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
-        #
-        # To Be Completed
-        #
+        print({"cid": self.sheet.get_cell_data(
+            event[1][0],
+            0
+        )})
+        CUSTOMER.query.filter_by(
+            **{"cid": self.sheet.get_cell_data(
+                event[1][0],
+                0
+            )}
+        ).delete()
+        db_session.commit()
 
     def fill_data_from_db(self):
         cs = CUSTOMER.query.all()
-        k = [[i.to_dict(rules=('-ORDER1',)).get(z) for z in data[0]] for i in cs]
+        k = [[i.to_dict(rules=('-ORDER1',)).get(z) for z in headers] for i in cs]
         data.extend(k)
-        print(k)
         pass
 
 # app = customer_demo()
