@@ -2,13 +2,11 @@ from Schema import CUSTOMER, db_session
 from tkinter import *
 
 
-def run_query_on_db():
-    # print(int(ctype.get()))
+def run_query_on_db(**kwargs):
+    c = CUSTOMER(**kwargs)
+    db_session.add(c)
+    db_session.commit()
     print("Customer inserted.")
-
-    #
-    # To Be Completed
-    #
 
 
 def create_new_customer_window():
