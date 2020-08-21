@@ -1,17 +1,15 @@
 from tksheet import Sheet
 import tkinter as tk
+from Schema import CUSTOMER
 
 global data
-data = [["id", "name", "type", "max credit"], [1, "Cust1", "Personal",  1000], [1, "Cust1", "Corporate",  2000]]
-
-
-def fill_data_from_db():
-    pass
+data = [["cid", "cName", "customerType", "maxCredit"], ]
 
 
 class customer_demo(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
+        self.fill_data_from_db()
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.frame = tk.Frame(self)
@@ -98,12 +96,11 @@ class customer_demo(tk.Tk):
         #
 
     def fill_data_from_db(self):
-        # get data from database
-        #
-        # To Be Completed
-        #
+        cs = CUSTOMER.query.all()
+        k = [[i.to_dict(rules=('-ORDER1',)).get(z) for z in data[0]] for i in cs]
+        data.extend(k)
+        print(k)
         pass
-
 
 # app = customer_demo()
 # app.mainloop()
