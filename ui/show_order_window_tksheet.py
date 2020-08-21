@@ -61,7 +61,7 @@ class show_oder_demo(tk.Tk):
 
         # __________ DISPLAY SUBSET OF COLUMNS __________
 
-        self.sheet.display_subset_of_columns(indexes=[0, 1, 2, 3], enable=True)
+        self.sheet.display_subset_of_columns(indexes=[0, 1, 2], enable=True)
 
         # __________ BINDING A FUNCTIONS TO USER ACTIONS __________
 
