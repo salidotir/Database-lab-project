@@ -1,8 +1,12 @@
 from tksheet import Sheet
 import tkinter as tk
+from Schema import ORDER1, db_session
 
 global data
-data = [["id", "date", "customer id", "total price"], [1, "2020-07-10", 1,  10000], [2, "2019-12-19", 3,  25000]]
+headers = ["cid",
+           "oDate",
+           "oid"]
+data = []
 
 
 class show_oder_demo(tk.Tk):
@@ -11,11 +15,13 @@ class show_oder_demo(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.frame = tk.Frame(self)
+        self.fill_data_from_db()
         self.frame.grid_columnconfigure(0, weight=1)
         self.frame.grid_rowconfigure(0, weight=1)
         self.sheet = Sheet(self.frame,
                            page_up_down_select_row=True,
                            # empty_vertical = 0,
+                           headers=headers,
                            column_width=120,
                            startup_select=(0, 1, "rows"),
                            data=data,
@@ -60,7 +66,7 @@ class show_oder_demo(tk.Tk):
         # __________ BINDING A FUNCTIONS TO USER ACTIONS __________
 
         self.sheet.extra_bindings([("end_edit_cell", self.end_edit_cell),
-                                   ("rc_delete_row", self.row_delete)
+                                   ("begin_rc_delete_row", self.row_delete)
                                    ])
 
         # __________ GETTING FULL SHEET DATA __________
@@ -82,24 +88,39 @@ class show_oder_demo(tk.Tk):
     def end_edit_cell(self, event):
         print("cell edited")
         print(event)
-        #
-        # To Be Completed
-        #
+        ORDER1.query.filter_by(
+            **{"oid": self.sheet.get_cell_data(
+                event[0],
+                0
+            )}
+        ).update(
+            {headers[event[1]]: self.sheet.get_cell_data(
+                event[0],
+                event[1]
+            )}
+        )
+        db_session.commit()
 
     def row_delete(self, event):
         print("row deleted")
         print(event)
-        #
-        # To Be Completed
-        #
+        print({"oid": self.sheet.get_cell_data(
+            event[1][0],
+            0
+        )})
+        ORDER1.query.filter_by(
+            **{"oid": self.sheet.get_cell_data(
+                event[1][0],
+                0
+            )}
+        ).delete()
+        db_session.commit()
 
     def fill_data_from_db(self):
-        # get data from database
-        #
-        # To Be Completed
-        #
+        cs = ORDER1.query.all()
+        k = [[i.to_dict().get(z) for z in headers] for i in cs]
+        data.extend(k)
         pass
-
 
 # app = oder_demo()
 # app.mainloop()
