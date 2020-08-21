@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from Schema import CUSTOMER, db_session
 from tkinter import *
 
 
@@ -18,28 +18,29 @@ def create_new_customer_window():
     # set window title
     root.wm_title("New customer")
 
-    main_label = Label(root, text='New customer').place(x=220, y=50)
+    main_label = Label(master=root, text='New customer').place(x=220, y=50)
 
-    cid_label = Label(root, text="cid").place(x=170, y=100)
-    global cid
-    cid = StringVar()
-    cid_text_box = Entry(root, width=20, textvariable=cid).place(x=215, y=100)
+    maxCredit_label = Label(root, text="maxCredit").place(x=150, y=100)
+    maxCredit = StringVar(master=root)
+    maxCredit_text_box = Entry(root, width=20, textvariable=maxCredit).place(x=215, y=100)
 
     cname_label = Label(root, text="cname").place(x=170, y=130)
-    global cname
-    cname = StringVar()
+    cname = StringVar(master=root)
     cname_text_box = Entry(root, width=20, textvariable=cname).place(x=215, y=130)
 
     ctype_label = Label(root, text="ctype").place(x=170, y=160)
-    global ctype
-    ctype = StringVar(root, "1")
-    values = {"Shakhsi": "1",
-              "Sherkati": "2"}
+    ctype = StringVar(master=root, value="0")
+    values = {"Shakhsi": "0",
+              "Sherkati": "1"}
     # for (text, value) in values.items():
-    Radiobutton(root, text="Shakhsi", variable=ctype, value="1").place(x=215, y=160)
-    Radiobutton(root, text="Sherkati", variable=ctype, value="2").place(x=290, y=160)
+    Radiobutton(root, text="Shakhsi", variable=ctype, value="0").place(x=215, y=160)
+    Radiobutton(root, text="Sherkati", variable=ctype, value="1").place(x=290, y=160)
 
-    btn_add = Button(root, text="Add", command=run_query_on_db).place(x=240, y=200)
+    btn_add = Button(root, text="Add", command=lambda: run_query_on_db(
+        cName=cname.get(),
+        customerType=ctype.get(),
+        maxCredit=maxCredit.get()
+    )).place(x=240, y=200)
 
     # ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.
 
