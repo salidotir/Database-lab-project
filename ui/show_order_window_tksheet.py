@@ -106,12 +106,12 @@ class show_oder_demo(tk.Tk):
         print(event)
         print({"oid": self.sheet.get_cell_data(
             event[1][0],
-            0
+            2
         )})
         ORDER1.query.filter_by(
             **{"oid": self.sheet.get_cell_data(
                 event[1][0],
-                0
+                2
             )}
         ).delete()
         db_session.commit()
