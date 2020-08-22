@@ -66,7 +66,7 @@ class ORDERITEM(Base, SerializerMixin):
     iid = Column(Integer, primary_key=True)
     oid = Column(ForeignKey('ORDER1.oid', ondelete='CASCADE'), nullable=False)
     pid = Column(ForeignKey('PRODUCT.pid', ondelete='CASCADE'), nullable=True)
-    quantity = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=True)
 
     ORDER1 = relationship('ORDER1', backref='ORDERITEM', passive_deletes=True)
     PRODUCT = relationship('PRODUCT', backref='ORDERITEM', passive_deletes=True)
