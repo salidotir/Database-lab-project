@@ -1,6 +1,6 @@
 from tksheet import Sheet
 import tkinter as tk
-from Schema import ORDERITEM, db_session
+from Schema import ORDERITEM, db_session, PRODUCT
 
 headers = [
     "iid",
@@ -31,7 +31,7 @@ class edit_oder_demo(tk.Tk):
                            headers=headers,
                            data=data,
                            height=500,  # height and width arguments are optional
-                           width=550  # For full startup arguments see DOCUMENTATION.md
+                           width=550,  # For full startup arguments see DOCUMENTATION.md
                            )
 
         self.sheet.enable_bindings(("single_select",  # "single_select" or "toggle_select"
@@ -51,7 +51,7 @@ class edit_oder_demo(tk.Tk):
                                     "rc_select",
                                     # "rc_insert_column",
                                     # "rc_delete_column",
-                                    # "rc_insert_row",
+                                    "rc_insert_row",
                                     "rc_delete_row",
                                     # "hide_columns",
                                     "copy",
@@ -66,14 +66,14 @@ class edit_oder_demo(tk.Tk):
 
         # __________ DISPLAY SUBSET OF COLUMNS __________
 
-        self.sheet.display_subset_of_columns(indexes=[0, 1, 2], enable=True)
+        # self.sheet.display_subset_of_columns(indexes=[0, 1, 2], enable=True)
 
         # __________ BINDING A FUNCTIONS TO USER ACTIONS __________
 
         self.sheet.extra_bindings([("end_edit_cell", self.end_edit_cell),
-                                   ("begin_rc_delete_row", self.row_delete)
+                                   ("begin_rc_delete_row", self.row_delete),
+                                   ("end_insert_row", self.end_insert_row),
                                    ])
-
         # __________ GETTING FULL SHEET DATA __________
 
         # self.all_data = self.sheet.get_sheet_data()
@@ -90,9 +90,21 @@ class edit_oder_demo(tk.Tk):
 
         # print (self.sheet.get_column_data(0)) # only accessible by index
 
+    def end_insert_row(self, event):
+        print("cell inserted")
+        try:
+            oi = ORDERITEM(**{'oid': self.oid})
+            db_session.add(oi)
+            db_session.commit()
+            self.sheet.set_cell_data(event[1], 1, value=self.oid)
+            self.sheet.set_cell_data(event[1], 0, value=oi.iid)
+            self.sheet.dehighlight_rows(rows=[event[0]])
+        except Exception as e:
+            self.sheet.highlight_rows(rows=[event[0]], fg='red', bg='red')
+            e.with_traceback()
+
     def end_edit_cell(self, event):
         print("cell edited")
-        print(event)
         ORDERITEM.query.filter_by(
             **{"iid": self.sheet.get_cell_data(
                 event[0],
@@ -108,7 +120,6 @@ class edit_oder_demo(tk.Tk):
 
     def row_delete(self, event):
         print("row deleted")
-        print(event)
         print({"iid": self.sheet.get_cell_data(
             event[1][0],
             0
@@ -122,10 +133,10 @@ class edit_oder_demo(tk.Tk):
         db_session.commit()
 
     def fill_data_from_db(self):
+        data.clear()
         ois = ORDERITEM.query.filter_by(oid=self.oid)
-        k = [[i.to_dict().get(z) for z in headers] for i in ois]
+        k = [[i.to_dict(rules=('-ORDER1', '-PRODUCT')).get(z) or 0 for z in headers] for i in ois]
         data.extend(k)
-
 
 # app = oder_demo()
 # app.mainloop()
