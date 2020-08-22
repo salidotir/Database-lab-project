@@ -91,7 +91,7 @@ class show_oder_demo(tk.Tk):
         ORDER1.query.filter_by(
             **{"oid": self.sheet.get_cell_data(
                 event[0],
-                0
+                2
             )}
         ).update(
             {headers[event[1]]: self.sheet.get_cell_data(
